@@ -1,0 +1,68 @@
+@CHARSET "ISO-8859-1";
+tr:hover{
+  cursor: pointer;
+  background-color: #ccc;
+}
+
+
+.tableData{
+	text-align: center;
+	padding: 15px;
+	border-spacing: 10px;
+	font-weight: bold;
+}
+.tableDataSong{
+	text-align: left;
+	font-weight: bold;
+	padding: 15px;
+	border-spacing: 10px;
+}
+
+.tableDataOn{
+	text-align: center;
+	padding: 15px;
+	font-weight: bold;
+	color: blue;
+	border-spacing: 10px;
+}
+.tableDataSongOn{
+	text-align: left;
+	padding: 15px;
+	font-weight: bold;
+	color: blue;
+}
+
+#output{
+	border: 2px dotted red;
+	float: left;
+}
+
+#tableDisplay{
+	display: flex;
+}
+
+#right{
+	float: right;
+    padding: 20px; 
+    width: 45%;
+    border: 2px solid #00CCFF;
+    box-shadow: 0px 2px 20px #006680;
+}
+
+#playlist {
+	width: 575px;
+	height: 75px;
+	/*top right bottom left*/
+	padding: 25px 0px 0px 25px;
+	
+	font-family: 'title';
+	font-size: 48px;
+	text-align: left;
+}
+
+#stage {
+	border: 2px solid #00CCFF;
+	margin-left: 20px;
+	margin-right: 20px;
+	padding: 20px;
+}

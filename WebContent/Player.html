@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>NU|Music</title>
+<link rel=stylesheet href="css/common.css" type="text/css">
+
+<style>
+body {
+	font-size: 96px;
+	text-align: left;
+}
+#container {
+	width: 600px;
+	/*top right bottom left*/
+	margin: 100px auto 0px auto;
+}
+#playlist {
+	width: 575px;
+	height: 75px;
+	/*top right bottom left*/
+	padding: 25px 0px 0px 25px;
+	border: 2px solid #00CCFF;
+	box-shadow: 0px 2px 20px #006680;
+	
+	font-family: 'title';
+	font-size: 48px;
+	text-align: left;
+	text-shadow: 5px 5px #006680;
+}
+#stage {
+	width: 600px;
+	height: 400px;
+	border: 2px solid #00CCFF;
+	border-top: none;
+	text-shadow: 5px 5px #006680;
+}
+#text {
+	height: 325px;
+}
+#audioPlayer {
+	width: 600px;
+	height: 30px;
+}
+#controls {
+	width: 600px;
+	height: 200px;
+	border: 2px solid #00CCFF;
+	border-top: none;
+}
+.control {
+	float:left;
+	/*top right bottom left*/
+	margin: 0px 20px 0px 0px;
+	cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+	<div id="container">
+		<div id="playlist">Playlist</div>
+		<div id="stage">
+			<div id="text">
+				<div id="title">Summer</div>
+				<div id="artist">Calvin Harris</div>
+			</div>
+			<audio id="audioPlayer" controls>
+				<source src="music/1.mp3" type="audio/mpeg">
+				Your browser does not support the audio element.
+			</audio>
+		</div>
+	</div>
+		<!-- 
+		<div id="controls">
+			<div id="previous" class="control"><<</div>
+			<div id="play" class="control" onclick="play()">></div>
+			<div id="next" class="control">>></div>
+		</div>
+	</div>
+	
+	<script>
+	var player = document.getElementById("audioPlayer");
+	var playType = "pause";
+	
+	function play() {
+		if(playType == "pause") {
+			player.play();
+			document.getElementById("play").innerHTML = "||";
+			playType = "play";
+		} else if (playType == "play") {
+			player.pause();
+			document.getElementById("play").innerHTML = ">";
+			playType = "pause";
+		}
+	}
+	</script>
+	 -->
+</body>
+</html>

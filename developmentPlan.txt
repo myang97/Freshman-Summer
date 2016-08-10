@@ -1,0 +1,47 @@
+** Development Plan for Nu Music **
+
+Component List
+	- XM twitter scraper [done]
+	- XM play Count consolidater [done]
+	- Song name to Youtube converter [done]
+	- Youtube song downloader [not started]
+	- Ranked playlist creator [testing]
+	- Web Player [testing]
+	- Preferences manager [not started]
+	- Shuffler [not started]
+	
+Database tables
+	- Raw XM data by play instance (RAW_XM_SONGS)
+		id, source, song, date, twitter_id
+	- XM consolidated per song (XM_SONGS)
+	- XM control table (XM_CTRL_ID) [control table]
+		id, source, newestDate, oldestDate
+	- Youtube song name to XM song name (YOUTUBE_ID) [linker table]
+	- Raw preference data by play instance (RAW_MUSIC_ID)
+	- Consolidated preference data (MUSIC_ID)
+		id, youtube song name, rank, pref data
+		
+Order of operations
+	1. Day start (9:00 AM)
+	2. Twitter scraper grabs for previous day's info
+	3. XM consolidater updates play count, newest play, and control table
+	4. New songs are identified based on oldest play count = yesterday
+	5. Song names are converted to youtube and added to table
+	6. Songs are downloaded and ID'd
+		Added to main music table as there will be no preferences to consolidate
+	7. New preferences are consolidated based on insert date >= yesterday
+	8. Daily playlists are generated. Ranked based off of consolidated XM and Preference table
+		All , newly added/unheard, favorites
+		Shuffler
+		
+Music Player
+	Pass XML structure of playlist to webpage beforeLoad
+	Iterate through on webpage
+	
+Scraper
+	Control table holds newestDate and oldestDate
+	oldestDate only used during fullLoad to track progress back through time
+		helpful if its not run all at once
+	newestDate used in incrementalLoad to track a lowDate
+	
+	

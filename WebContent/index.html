@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>PLAYLIST</title>
+<link type = "text/css" rel = "stylesheet" href = "Testing.css"/>
+<script>
+	var playlistNumber;
+	var counter;
+	var numPlaylistsCounter;
+	var preferred;
+	var xhttp;
+	var size;
+	var clicked;
+	
+	function loadPlaylist(next){
+		clicked = false;
+		playlistNumber = 0;
+		counter = 0;
+		numPlaylistsCounter = 0;
+		preferred = next;
+		var xhttpCreate = new XMLHttpRequest();
+		document.getElementById("output").innerHTML = ""; 
+		document.getElementById("output").style.visibility='hidden'; 
+		if(next === "preferred"){
+			document.getElementById("testing").innerHTML = "Playlist Status: creating *your* playlist";
+		}
+		else{
+			document.getElementById("testing").innerHTML = "Playlist Status: creating new playlist";
+		}
+		document.getElementById("playlistNumber").innerHTML = "Playlist Number: 0 of 0";
+		document.getElementById("artist").innerHTML = "Artist Name:";
+		document.getElementById("title").innerHTML = "Song Name:";
+		document.getElementById("totalTime").innerHTML =     "Total Time Listened: ";
+		document.getElementById("combinedVote").innerHTML =  "Total Vote:          ";
+		document.getElementById("rating").innerHTML =        "Rating:              ";
+
+		var audio = document.getElementById("audioPlayer");
+		var source = document.getElementById("songName");
+		source.src = "";
+		audio.load();
+		if(next === "preferred"){
+			xhttpCreate.open("GET", "GetPreferredPlaylist", true);
+		}
+		else{
+			xhttpCreate.open("GET", "GetPlaylist", true);
+		}
+		xhttpCreate.send();
+		xhttpCreate.onreadystatechange = function() {
+			if (xhttpCreate.readyState == 4 && xhttpCreate.status == 200) {
+				document.getElementById("playlistNumber").innerHTML = "Playlist Number: 0 of " + xhttpCreate.responseText;
+				size = xhttpCreate.responseText;
+				if(next === "preferred"){
+					document.getElementById("testing").innerHTML = "Playlist Status: created your playlist!";
+				}
+				else{
+					document.getElementById("testing").innerHTML = "Playlist Status: created playlist!";
+				}
+			}
+		};	
+	}
+	
+	function movePlaylist(movement){
+		if(((numPlaylistsCounter + 1) != size && movement === "nextPlaylist") || ((numPlaylistsCounter - 1) != -1 && movement === "previousPlaylist")){
+			if(movement === "nextPlaylist"){
+				playlistNumber += 15;
+				numPlaylistsCounter++;
+			}
+			else{
+				playlistNumber -= 15;
+				numPlaylistsCounter--;
+			}
+			counter = playlistNumber;
+			//document.getElementById("counter").innerHTML = numPlaylistsCounter;
+			getInfo(movement);
+			loadDoc(preferred);
+		}
+		else{
+			document.getElementById("testing").innerHTML = "Playlist Status: playlist unavailable";
+			if(numPlaylistCounter === size){
+				numPlaylistCounter = size - 1;
+			}
+			else{
+				numPlaylistCounter = 0;
+			}
+		}
+	}
+	
+	function loadDoc(next) {
+		document.getElementById("voted").innerHTML = " ";
+		//document.getElementById("counter").innerHTML = numPlaylistsCounter;
+		document.getElementById("output").style.visibility='visible';
+		//document.getElementById("songName").src = "musicSongs/1.mp3";
+		xhttp = new XMLHttpRequest();
+		if(preferred === "preferred"){
+			xhttp.open("POST", "preferredMusic.xml", true);
+		}
+		else{
+			xhttp.open("POST", "music.xml", true);
+		}
+		xhttp.send();
+		xhttp.onreadystatechange = function() {
+			//document.getElementById("working").innerHTML = xhttp.status;
+			if (xhttp.readyState == 4 && xhttp.status == 200) {
+				if(preferred === "preferred"){
+					document.getElementById("testing").innerHTML = "Playlist Status: displaying preferred playlist";
+				}
+				else{
+					document.getElementById("testing").innerHTML = "Playlist Status: displaying the playlist";
+				}
+				myFunction(xhttp, next);
+			}
+		};	
+	}
+		
+	function myFunction(xml, nextResult) {
+		if(nextResult === "up"){
+			counter += 1;
+		}
+		else if(nextResult === "down"){
+			counter += -1;
+		}
+		
+		var xmlDoc = xml.responseXML;
+		var table = "<tr><th style:'text-align: center; padding: 10px'>Song Number</th><th style:'text-align: center; padding: 10px'>Artist</th><th style:'text-align: center; padding: 10px'>Title</th></tr>";
+		var x = xmlDoc.getElementsByTagName("SONG");
+		var songName = "";
+		if(counter === playlistNumber + 15){
+			counter = playlistNumber;
+		}
+		else if(counter === playlistNumber - 1){
+			counter = playlistNumber + 14;
+		}
+		for (var i = playlistNumber; i < (playlistNumber + 15); i++) {
+			if (i == counter) {
+				songName = x[i].getElementsByTagName("SONG_NAME")[0].childNodes[0].nodeValue;
+				table += "<tr id = 'selectSong' onClick = 'change(this)'><td class = 'tableDataOn'>"
+						+ x[i].getElementsByTagName("ID")[0].childNodes[0].nodeValue
+						+ "</td><td class = 'tableDataSongOn'>"
+						+ x[i].getElementsByTagName("ARTIST_NAME")[0].childNodes[0].nodeValue
+						+ "</td><td id = 'currentSong' class = 'tableDataSongOn'>"
+						+ x[i].getElementsByTagName("SONG_NAME")[0].childNodes[0].nodeValue
+						+ "</td></tr>";
+				document.getElementById("artist").innerHTML =        "Artist Name:          " + x[i].getElementsByTagName("ARTIST_NAME")[0].childNodes[0].nodeValue;
+				document.getElementById("title").innerHTML =         "Song Name:           " + x[i].getElementsByTagName("SONG_NAME")[0].childNodes[0].nodeValue;
+				document.getElementById("totalTime").innerHTML =     "Total Time Listened: " + x[i].getElementsByTagName("TOTAL_LISTENED")[0].childNodes[0].nodeValue;
+				document.getElementById("combinedVote").innerHTML =  "Total Vote:          " + (parseInt(x[i].getElementsByTagName("UPVOTE")[0].childNodes[0].nodeValue, 10) - parseInt(x[i].getElementsByTagName("DOWNVOTE")[0].childNodes[0].nodeValue, 10));
+				document.getElementById("rating").innerHTML =        "Rating:              " + x[i].getElementsByTagName("RATING")[0].childNodes[0].nodeValue;
+			} else {
+				table += "<tr id = 'selectSong' onClick = 'change(this)'><td class = 'tableData'>"
+						+ x[i].getElementsByTagName("ID")[0].childNodes[0].nodeValue
+						+ "</td><td class = 'tableDataSong'>"
+						+ x[i].getElementsByTagName("ARTIST_NAME")[0].childNodes[0].nodeValue
+						+ "</td><td class = 'tableDataSong'>"
+						+ x[i].getElementsByTagName("SONG_NAME")[0].childNodes[0].nodeValue
+						+ "</td></tr>";
+			}
+		}
+		
+		//document.getElementById("playlistNumber").innerHTML = playlistNumber;
+		
+		var audio = document.getElementById("audioPlayer");
+		var source = document.getElementById("songName");
+		source.src = "musicSongs/" + songName + ".mp3";
+		audio.load();
+		//document.getElementById("tableLength").innerHTML = x.length;
+		
+		document.getElementById("playlistNumber").innerHTML = "Playlist Number: " + (numPlaylistsCounter + 1) + " of " + size;
+		document.getElementById("output").innerHTML = table;
+		if(clicked == true){
+			clicked = false;
+			getInfo('clickedOn');
+		}
+	}
+	
+	function change(element){
+		counter = element.rowIndex - 1 + playlistNumber;
+		loadDoc('');
+		getInfo('click');
+		clicked = true;
+	}
+
+	function getInfo(vote){
+		var infoRequest;
+		infoRequest = new XMLHttpRequest();
+		
+		if(vote === "up"){
+			document.getElementById("voted").innerHTML = "Upvoted!";
+		}
+		else if(vote === "down"){
+			document.getElementById("voted").innerHTML = "Downvoted!";
+		}
+		
+		infoRequest.onreadystatechange = function() {
+			if (infoRequest.readyState == 4 && infoRequest.status == 200) {
+				response = infoRequest.responseText.trim();			
+			}
+		}
+		
+
+		infoRequest.open("GET", "AddPreferences?vote="+vote
+				+"&songName="+encodeURIComponent(document.getElementById("currentSong").innerHTML)
+				+"&amountListened="+document.getElementById("audioPlayer").currentTime
+				+"&duration="+document.getElementById("audioPlayer").duration
+				+"&type="+vote, true);
+		infoRequest.send();
+		//document.getElementById("called").innerHTML = "FUCK YEA IT DID";
+	}
+</script>
+</head>
+<body>
+	<button id = "begin" onClick = "loadPlaylist('')">Create the Playlist!</button>
+	<button id = "clickable" onClick = "loadDoc('')">Load up the Playlist!</button> 
+	<p></p>
+	<button id = "beginPreferred" onClick = "loadPlaylist('preferred')">Create *YOUR* Playlist!</button>
+	<button id = "preferred" onClick = "loadDoc('preferred')">Load up *YOUR* Playlist!</button> 
+	<p> </p>
+	<script>
+	var clickable = document.getElementById("clickable");
+	clickable.onmouseover = function(){
+		this.style.backgroundColor = "green";
+	};
+	clickable.onmouseout = function() {
+	    this.style.backgroundColor = '';
+	};
+	</script>
+	<button id = "previousPlaylist" onClick = "movePlaylist('previousPlaylist')">Go to Previous Playlist</button> 
+	<button id = "nextPlaylist" onClick = "movePlaylist('nextPlaylist')">Go to Next Playlist</button> 
+	<p id = "testing">Playlist Status: idling</p>
+	<p id = "playlistNumber">Playlist Number: 0 of 0</p>
+	<p> </p>
+	<div id = 'tableDisplay'>
+		<table border = 10px id='output'></table>
+		<script>
+			document.getElementById("output").style.visibility='hidden' 
+		</script>
+		<div id='right'>
+			<div id="playlist">Playlist</div>
+			<div id="stage">
+				<div id="artist" style="padding: 10px">Artist Name: </div>
+				<div id="title" style="padding: 10px">Song Name: </div>
+				<div id="totalTime" style="padding: 10px">Total Time Listened: </div>
+				<div id="combinedVote" style="padding: 10px">Total Vote: </div>
+				<div id="rating" style="padding: 10px">Rating: </div>
+				<button id = "previous" onClick = "getInfo('previousSong'); loadDoc('down')" style = "margin: 5px; padding: 5px">Previous</button> 
+				<button id = "next" onClick = "getInfo('nextSong'); loadDoc('up')" style = "margin: 5px; padding: 5px">Next</button> 
+				<button id = "upvote" onClick = "getInfo('up')" style = "margin: 5px; padding: 5px">Upvote :)</button> 
+				<button id = "downvote" onClick = "getInfo('down')" style = "margin: 5px; padding: 5px">Downvote :(</button> 
+				<p id = "voted" style = "margin: 5px"> </p>
+				<audio id="audioPlayer" style="padding: 5px" controls autoplay onended="getInfo(''); loadDoc('up')">
+					<source id="songName" src="" type="audio/mpeg">
+					Your browser does not support the audio element.
+					</source>
+				</audio>
+				<script>
+				
+				</script>
+			</div>		
+		</div>
+	</div>	
+</body>
+</html>

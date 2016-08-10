@@ -1,0 +1,17 @@
+@font-face {
+    font-family: 'title';
+    src: url('../fonts/PressStart2P.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'regular';
+    src: url('../fonts/ThinPixel7.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+body {
+	background-color: black;
+	font-family: 'regular';
+	color: #00CCFF;
+}

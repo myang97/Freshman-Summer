@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<libraryInfos>
+<libraryInfo home="/home/michael/Eclipse" version="1.8.0_92">
+<bootpath>
+<entry path="/home/michael/Eclipse/jre/lib/resources.jar"/>
+<entry path="/home/michael/Eclipse/jre/lib/rt.jar"/>
+<entry path="/home/michael/Eclipse/jre/lib/sunrsasign.jar"/>
+<entry path="/home/michael/Eclipse/jre/lib/jsse.jar"/>
+<entry path="/home/michael/Eclipse/jre/lib/jce.jar"/>
+<entry path="/home/michael/Eclipse/jre/lib/charsets.jar"/>
+<entry path="/home/michael/Eclipse/jre/lib/jfr.jar"/>
+<entry path="/home/michael/Eclipse/jre/classes"/>
+</bootpath>
+<extensionDirs>
+<entry path="/home/michael/Eclipse/jre/lib/ext"/>
+<entry path="/usr/java/packages/lib/ext"/>
+</extensionDirs>
+<endorsedDirs>
+<entry path="/home/michael/Eclipse/jre/lib/endorsed"/>
+</endorsedDirs>
+</libraryInfo>
+</libraryInfos>

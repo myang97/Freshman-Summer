@@ -1,0 +1,4 @@
+cd /home/tommying/Music
+
+URL="'$1'"
+youtube-dl --extract-audio --audio-format mp3 $1
